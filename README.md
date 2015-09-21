@@ -42,9 +42,16 @@ object App extends PageApplication {
   )
 
   def view() = div(
-   ReactDynamic(GoogleMap.component, props),
-   ReactDynamic(ReactSearchBox.component, searchProps),
-      "Search query: ", searchText,
+   p(
+     span("Lat: "), number().bind(lat),
+     span("Lon: "), number().bind(lon),
+     span("Zoom: "), number().bind(zoom)
+   ),
+   p(
+    ReactDynamic(GoogleMap.component, props),
+    ReactDynamic(ReactSearchBox.component, searchProps),
+   "Search query: ", searchText,
+   )
  )
 }
 ```
