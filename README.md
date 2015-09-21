@@ -10,7 +10,7 @@ This allows to use
 
 (given https://github.com/MetaStack-pl/MetaRx/issues/28 solved):
 
-Add this library to project dependencies:
+Add this library to project dependencies (until it is published somewhere, you need to download this project and run "sbt publish-local" first):
 
 ```sbt
 libraryDependencies ++= Seq(
