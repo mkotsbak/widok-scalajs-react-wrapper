@@ -13,12 +13,11 @@ This allows to use
 Add this library to project dependencies (until it is published somewhere, you need to download this project and run "sbt publish-local" first):
 
 ```sbt
-libraryDependencies ++= Seq(
-...
-  "io.github.widok" %%% "widok-scalajs-react-wrapper" % "0.1.0-SNAPSHOT" withSources() withJavadoc()
-)
-```
+libraryDependencies += "io.github.widok" %%% "widok-scalajs-react-wrapper" % "0.1.0-SNAPSHOT" withSources() withJavadoc()
 
+jsDependencies += "org.webjars" % "react" % "0.12.2" / "react-with-addons.js" commonJSName "React"
+
+```
 Then in the Widok based code:
 
 ```scala
