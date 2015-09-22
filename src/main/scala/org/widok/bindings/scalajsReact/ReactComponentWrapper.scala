@@ -18,15 +18,6 @@ object ReactComponentWrapper {
     def render(target: dom.Node) = React.render(reactComponent, target)
   }
 
-  implicit class ReactWidget[T <: ReactComponentU_](wrapper: ReactWrapper[T]) extends Widget[ReactWidget[T]] {
-    override val rendered: Element = DOM.createElement("span")
-
-    override def render(parent: dom.Node, offset: dom.Node): Unit = {
-      wrapper.render(rendered)
-      super.render(parent, offset)
-    }
-  }
-
   case class ReactStatic(component: ReactElement) extends ReactWrapper[ReactComponentU_] {
     override val reactComponent = ReactComponentB.static("Static wrapper for Widok", component).build(Unit)
   }
@@ -46,15 +37,5 @@ object ReactComponentWrapper {
 
   case class ReactDynamic[P, S, B, N <: TopNode](component: ReactComponentC.ReqProps[P, S, B, N], props: ReadChannel[P]) extends ReactWrapper[ReactComponentU_] {
     override val reactComponent = wrapperComponentDynamic(component)(props)
-  }
-
-  implicit class ReactPlaceholderWidget[U <: ReactComponentU_, T <: ReactWrapper[U]](value: ReadChannel[T]) extends View {
-    val node = DOM.createElement("span")
-
-    def render(parent: dom.Node, offset: dom.Node) {
-      DOM.insertAfter(parent, offset, node)
-
-      value.attach { cur: ReactWrapper[U] => cur.render(node) }
-    }
   }
 }
