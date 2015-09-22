@@ -1,13 +1,9 @@
 package org.widok.bindings.scalajsReact
 
-import japgolly.scalajs.react.React
-import japgolly.scalajs.react.ReactComponentB
-import japgolly.scalajs.react.ReactComponentC
-import japgolly.scalajs.react.ReactElement
-import japgolly.scalajs.react._
+import japgolly.scalajs.react.{React, ReactComponentB, ReactComponentC, ReactElement, _}
 import org.scalajs.dom
-import org.scalajs.dom.html._
-import org.widok.{DOM, Widget}
+import org.scalajs.dom.html.Element
+import org.widok.{View, DOM, Widget}
 import pl.metastack.metarx.ReadChannel
 
 /**
@@ -16,15 +12,23 @@ import pl.metastack.metarx.ReadChannel
 
 object ReactComponentWrapper {
 
-  case class ReactStatic(component: Unit => ReactElement) extends Widget[ReactStatic] {
-    override val rendered = DOM.createElement("span")
+  trait ReactWrapper[T <: ReactComponentU_] {
+    val reactComponent: T
+
+    def render(target: dom.Node) = React.render(reactComponent, target)
+  }
+
+  implicit class ReactWidget[T <: ReactComponentU_](wrapper: ReactWrapper[T]) extends Widget[ReactWidget[T]] {
+    override val rendered: Element = DOM.createElement("span")
 
     override def render(parent: dom.Node, offset: dom.Node): Unit = {
+      wrapper.render(rendered)
       super.render(parent, offset)
-      React.render(
-        ReactComponentB.static("Static wrapper for Widok", component()).build(Unit),
-        rendered)
     }
+  }
+
+  case class ReactStatic(component: ReactElement) extends ReactWrapper[ReactComponentU_] {
+    override val reactComponent = ReactComponentB.static("Static wrapper for Widok", component).build(Unit)
   }
 
   private def wrapperComponentDynamic[WP, WS, WB, WN <: TopNode](component: ReactComponentC.ReqProps[WP, WS, WB, WN]) =
@@ -34,18 +38,23 @@ object ReactComponentWrapper {
       .render(scope => {
         component(scope.state)
       })
-      .componentWillMount ( scope =>
+      .componentWillMount(scope =>
         scope.props.distinct.attach { currProps =>
           scope.setState(currProps)
         })
       .build
 
-  case class ReactDynamic[P, S, B, N <: TopNode](component: ReactComponentC.ReqProps[P, S, B, N], props: ReadChannel[P]) extends Widget[ReactDynamic[P, S, B, N]] {
-    override val rendered: Element = DOM.createElement("span")
+  case class ReactDynamic[P, S, B, N <: TopNode](component: ReactComponentC.ReqProps[P, S, B, N], props: ReadChannel[P]) extends ReactWrapper[ReactComponentU_] {
+    override val reactComponent = wrapperComponentDynamic(component)(props)
+  }
 
-    React.render(
-      wrapperComponentDynamic(component)(props),
-      rendered
-    )
+  implicit class ReactPlaceholderWidget[U <: ReactComponentU_, T <: ReactWrapper[U]](value: ReadChannel[T]) extends View {
+    val node = DOM.createElement("span")
+
+    def render(parent: dom.Node, offset: dom.Node) {
+      DOM.insertAfter(parent, offset, node)
+
+      value.attach { cur: ReactWrapper[U] => cur.render(node) }
+    }
   }
 }

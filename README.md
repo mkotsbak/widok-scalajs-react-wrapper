@@ -21,7 +21,7 @@ jsDependencies += "org.webjars" % "react" % "0.12.2" / "react-with-addons.js" co
 Then in the Widok based code:
 
 ```scala
-import org.widok.bindings.scalajsReact.ReactComponentWrapper.ReactDynamic
+import org.widok.bindings.scalajsReact.ReactComponentWrapper._
 
 import chandu0101.scalajs.react.components.fascades.{LatLng, Marker}
 import chandu0101.scalajs.react.components.searchboxes.ReactSearchBox.DefaultStyle
