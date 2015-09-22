@@ -10,7 +10,7 @@ version := "0.1.0-SNAPSHOT"
 scalaVersion := buildScalaVersion
 
 libraryDependencies ++= Seq(
-  "io.github.widok" %%% "widok" % "0.2.2" withSources() withJavadoc(),
+  "io.github.widok" %%% "widok" % "0.2.3" withSources() withJavadoc(),
   "com.github.japgolly.scalajs-react" %%% "core" % scalajsReactVersion
 )
 

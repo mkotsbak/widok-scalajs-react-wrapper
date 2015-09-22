@@ -7,7 +7,8 @@ import japgolly.scalajs.react.ReactElement
 import japgolly.scalajs.react._
 import org.scalajs.dom
 import org.scalajs.dom.html._
-import org.widok.{ReadChannel, DOM, Widget}
+import org.widok.{DOM, Widget}
+import pl.metastack.metarx.ReadChannel
 
 /**
  * Created by marius on 9/21/15.
@@ -28,7 +29,7 @@ object ReactComponentWrapper {
 
   private def wrapperComponentDynamic[WP, WS, WB, WN <: TopNode](component: ReactComponentC.ReqProps[WP, WS, WB, WN]) =
     ReactComponentB[ReadChannel[WP]]("Dynamic wrapper for Widok")
-      .initialStateP(_.cache.get)
+      .initialStateP(_.cache.get.get)
       .noBackend
       .render(scope => {
         component(scope.state)
