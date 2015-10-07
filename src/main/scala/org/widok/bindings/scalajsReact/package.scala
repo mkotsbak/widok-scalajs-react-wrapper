@@ -4,7 +4,8 @@ import japgolly.scalajs.react.ReactComponentU_
 import org.scalajs.dom
 import org.scalajs.dom.html._
 import org.widok.bindings.scalajsReact.ReactComponentWrapper.ReactWrapper
-import org.widok.{DOM, Widget}
+import org.widok.{View, DOM, Widget}
+import pl.metastack.metarx.ReadChannel
 
 /**
  * Created by marius on 9/23/15.

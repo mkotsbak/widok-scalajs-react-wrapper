@@ -2,8 +2,6 @@ package org.widok.bindings.scalajsReact
 
 import japgolly.scalajs.react.{React, ReactComponentB, ReactComponentC, ReactElement, _}
 import org.scalajs.dom
-import org.scalajs.dom.html.Element
-import org.widok.{View, DOM, Widget}
 import pl.metastack.metarx.ReadChannel
 
 /**
